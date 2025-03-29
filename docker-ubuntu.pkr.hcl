@@ -10,10 +10,16 @@ packer {
   }
 }
 
+# Constants, cannot be updated at runtime
+variable "docker_image" {
+  type = string
+  default = "ubuntu:jammy"
+}
+
 # Configures a specific builder plugin
 # Builder type and name, e.g. source "type" "name"
 source "docker" "ubuntu" {
-  image  = "ubuntu:jammy"
+  image  = var.docker_image
   commit = true
 }
 
@@ -38,7 +44,7 @@ build {
 
   provisioner "shell" {
     inline = [
-      "echo Provisioned image"
+      "echo Running the ${var.docker_image} Docker image"
     ]
   }
 }
