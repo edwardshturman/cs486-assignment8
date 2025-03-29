@@ -12,7 +12,7 @@ packer {
 
 # Constants, cannot be updated at runtime
 variable "docker_image" {
-  type = string
+  type    = string
   default = "ubuntu:jammy"
 }
 
@@ -22,13 +22,18 @@ source "docker" "ubuntu" {
   image  = var.docker_image
   commit = true
 }
+source "docker" "ubuntu-focal" {
+  image  = "ubuntu:focal"
+  commit = true
+}
 
 # What should be done with the container after it launches
 build {
   name = "learn-packer"
   sources = [
     # Reference syntax: source.<type>.<name> as defined in the source block
-    "source.docker.ubuntu"
+    "source.docker.ubuntu",
+    "source.docker.ubuntu-focal"
   ]
 
   # Provisioners automate modifications to the image
@@ -44,7 +49,7 @@ build {
 
   provisioner "shell" {
     inline = [
-      "echo Running the ${var.docker_image} Docker image"
+      "echo Running $(cat /etc/os-release | grep VERSION= | sed 's/\"//g' | sed 's/VERSION=//g') Docker image"
     ]
   }
 }
