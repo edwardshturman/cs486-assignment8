@@ -41,9 +41,19 @@ build {
   provisioner "shell" {
     inline = [
       "echo \"Upgrading packages\"",
-      "sudo yum update",
-      "sudo yum -y upgrade",
+      "sudo yum update -y",
       "echo \"Upgraded packages\""
+    ]
+  }
+
+  provisioner "shell" {
+    inline = [
+      "echo \"Installing Docker\"",
+      "sudo yum install -y docker",
+      "sudo systemctl enable docker",
+      "sudo systemctl start docker",
+      "sudo docker run hello-world",
+      "echo \"Docker installed\""
     ]
   }
 }
