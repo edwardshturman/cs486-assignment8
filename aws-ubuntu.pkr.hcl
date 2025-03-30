@@ -11,7 +11,7 @@ packer {
 }
 
 # Constants, cannot be updated at runtime
-variable "ami_name" {
+variable "ami_prefix" {
   type    = string
   default = "learn-packer-aws"
 }
@@ -24,10 +24,15 @@ variable "aws_region" {
   default = "us-west-1"
 }
 
+# Locals are for values that are computed at runtime; cannot be overridden
+locals {
+  timestamp = regex_replace(timestamp(), "[-TZ:]", "")
+}
+
 # Configures a specific builder plugin
 # Builder type and name, e.g. source "type" "name"
 source "amazon-ebs" "ubuntu" {
-  ami_name      = var.ami_name
+  ami_name      = "${var.ami_prefix}-${local.timestamp}"
   instance_type = var.instance_type
   region        = var.aws_region
 
@@ -51,4 +56,14 @@ build {
     # Reference syntax: source.<type>.<name> as defined in the source block
     "source.amazon-ebs.ubuntu"
   ]
+
+  # Provisioners automate modifications to the image
+  provisioner "shell" {
+    inline = [
+      "echo \"Upgrading packages\"",
+      "sudo apt-get update",
+      "sudo apt-get -y upgrade",
+      "echo \"Upgraded packages\""
+    ]
+  }
 }
