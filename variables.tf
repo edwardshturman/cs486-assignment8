@@ -17,7 +17,7 @@ variable "vpc_name" {
 }
 
 variable "allow_ssh_ip" {
-  description = "An IPv4 from which SSH access is allowed"
+  description = "An IPv4 address from which SSH access is allowed"
   type        = string
   default     = ""
 }

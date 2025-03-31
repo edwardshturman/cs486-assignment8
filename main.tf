@@ -24,12 +24,34 @@ module "bastion" {
   source  = "umotif-public/bastion/aws"
   version = "2.0.0"
 
-  region          = "us-west-1"
-  name_prefix     = var.instance_prefix
-  vpc_id          = module.vpc.vpc_id
-  public_subnets  = module.vpc.public_subnets
-  private_subnets = module.vpc.private_subnets
-  ssh_key_name    = "bastion-key"
+  region              = "us-west-1"
+  name_prefix         = var.instance_prefix
+  vpc_id              = module.vpc.vpc_id
+  public_subnets      = module.vpc.public_subnets
+  private_subnets     = module.vpc.private_subnets
+  ingress_cidr_blocks = ["${var.allow_ssh_ip}/32"]
+  ssh_key_name        = "bastion-key"
+}
+
+resource "aws_security_group" "ec2_sg" {
+  name   = "ec2-instance-sg"
+  vpc_id = module.vpc.vpc_id
+
+  ingress {
+    description     = "Allow SSH from bastion host"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [module.bastion.security_group_id]
+  }
+
+  egress {
+    description = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 module "ec2_instances" {
@@ -40,6 +62,6 @@ module "ec2_instances" {
   name                   = "${var.instance_prefix}-${count.index + 1}"
   ami                    = "ami-0fa75d35c5505a879" # Amazon Linux 2023 AMI 64-bit x86
   instance_type          = "t2.micro"
-  vpc_security_group_ids = [module.vpc.default_security_group_id]
+  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
   subnet_id              = module.vpc.public_subnets[0]
 }
