@@ -24,13 +24,15 @@ module "bastion" {
   source  = "umotif-public/bastion/aws"
   version = "2.0.0"
 
-  region              = "us-west-1"
-  name_prefix         = var.instance_prefix
-  vpc_id              = module.vpc.vpc_id
-  public_subnets      = module.vpc.public_subnets
-  private_subnets     = module.vpc.private_subnets
-  ingress_cidr_blocks = ["${var.allow_ssh_ip}/32"]
-  ssh_key_name        = "bastion-key"
+  region                 = "us-west-1"
+  ami_id                 = "ami-0fa75d35c5505a879" # Amazon Linux 2023 AMI 64-bit x86
+  bastion_instance_types = ["t2.micro"]
+  name_prefix            = var.instance_prefix
+  vpc_id                 = module.vpc.vpc_id
+  public_subnets         = module.vpc.public_subnets
+  private_subnets        = module.vpc.private_subnets
+  ingress_cidr_blocks    = ["${var.allow_ssh_ip}/32"]
+  ssh_key_name           = "bastion-key"
 }
 
 resource "aws_security_group" "ec2_sg" {
