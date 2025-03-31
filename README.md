@@ -74,8 +74,8 @@ echo "public_key = \"$(cat bastion-key.pub)\"" >> terraform.tfvars
 ## Building an image with Packer
 
 ```zsh
-packer init
-packer build
+packer init aws.pkr.hcl
+packer build aws.pkr.hcl
 ```
 
 Take note of the AMI from the output. Add it to the Terraform variables for use in the next step:
