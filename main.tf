@@ -63,5 +63,5 @@ module "ec2_instances" {
   ami                    = "ami-0fa75d35c5505a879" # Amazon Linux 2023 AMI 64-bit x86
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
-  subnet_id              = module.vpc.public_subnets[0]
+  subnet_id              = module.vpc.private_subnets[0]
 }
