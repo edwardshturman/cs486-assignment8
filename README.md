@@ -92,3 +92,23 @@ terraform apply
 You should now see seven running instances in `us-west-1`.
 
 ![Screenshot of AWS EC2 Instances in the Console](assets/instances.png)
+
+## Connecting to an instance
+
+You can SSH into the bastion host by running:
+
+```zsh
+ssh -A -i bastion-key ec2-user@<bastion public IPv4>
+```
+
+From there, you can connect to any one of the EC2 instances by using the private IPv4:
+
+```zsh
+ssh ec2-user@<EC2 private IPv4>
+```
+
+You can verify Docker was installed successfully and is running by creating a container for the `hello-world` image:
+
+```zsh
+sudo docker run hello-world
+```
