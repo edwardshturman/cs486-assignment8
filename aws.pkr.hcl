@@ -56,4 +56,17 @@ build {
       "echo \"Docker installed\""
     ]
   }
+
+  post-processor "manifest" {
+    output     = "manifest.json"
+    strip_path = true
+  }
+
+  post-processor "shell-local" {
+    inline = [<<EOF
+echo "ami = \"$(cat manifest.json | jq -r .builds[0].artifact_id |  cut -d':' -f2)\"" >> terraform.tfvars
+echo "Added AMI ID to terraform.tfvars"
+EOF
+    ]
+  }
 }

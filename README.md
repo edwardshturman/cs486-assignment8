@@ -78,13 +78,7 @@ packer init aws.pkr.hcl
 packer build aws.pkr.hcl
 ```
 
-Take note of the AMI from the output. Add it to the Terraform variables for use in the next step:
-
-```zsh
-echo "ami = \"<ami>\"" >> terraform.tfvars
-```
-
-Replace `<ami>` with the AMI.
+The AMI ID from the output will automatically be added as `ami` to the Terraform variables for use in the next step.
 
 ## Creating infrastructure with Terraform
 
