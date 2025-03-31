@@ -86,7 +86,7 @@ We're all good to go to launch six EC2 instances using our AMI created with Pack
 
 ```zsh
 terraform init
-terraform build
+terraform apply
 ```
 
 You should now see seven running instances in `us-west-1`.
