@@ -62,7 +62,7 @@ module "ec2_instances" {
 
   count                  = var.instance_count
   name                   = "${var.instance_prefix}-${count.index + 1}"
-  ami                    = "ami-0fa75d35c5505a879" # Amazon Linux 2023 AMI 64-bit x86
+  ami                    = var.ami
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
   subnet_id              = module.vpc.private_subnets[0]

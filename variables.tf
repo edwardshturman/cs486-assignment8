@@ -1,3 +1,9 @@
+variable "ami" {
+  description = "The AMI ID to use for the EC2 instances"
+  type        = string
+  default     = "ami-0fa75d35c5505a879" # Amazon Linux 2023 AMI 64-bit x86
+}
+
 variable "instance_prefix" {
   description = "A prefix for the Name tag for the EC2 instance cluster"
   type        = string
