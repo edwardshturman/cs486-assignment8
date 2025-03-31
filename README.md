@@ -67,7 +67,7 @@ You can specify the public RSA key from a keypair to be linked to the bastion ho
 Make a new keypair and copy the public key:
 
 ```zsh
-ssh-keygen -t rsa -b 2048 -m PEM -f bastion-key
+ssh-keygen -t rsa -b 2048 -m PEM -N "" -f bastion-key
 echo "public_key = \"$(cat bastion-key.pub)\"" >> terraform.tfvars
 ```
 
